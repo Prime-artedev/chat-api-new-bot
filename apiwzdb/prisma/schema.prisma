@@ -1,0 +1,22 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model chats_whatsapp {
+  id Int @id @default(autoincrement())
+  jid String @db.VarChar(30)
+  fromMe Boolean
+  messageId String @db.VarChar(100)
+  pushName String @db.VarChar(100)
+  message String @db.Text
+  reference String @db.VarChar(30)
+  instance String @db.VarChar(250)
+}

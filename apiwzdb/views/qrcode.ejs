@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WhatsApp QrCode</title>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+    <script>
+      // Enable pusher logging - don't include this in production
+      Pusher.logToConsole = true;
+      
+      var pusher = new Pusher("<%= process.env.PUSHER_KEY %>", { 
+        cluster: "ap2",
+      });
+      var channel = pusher.subscribe("<%= instance_key %>");
+      channel.bind("qrcode_update", function (data) {
+        console.log(data);
+        document.getElementById("qrcode_box").setAttribute("src", data.qrcode);
+      });
+      channel.bind("qrcode_scanned", function (data) {
+        console.log(data);
+        document.getElementById(
+          "scanned"
+        ).textContent = `Successfully signed in as ${data.number}`;
+      });
+    </script>
+  </head>
+  <body>
+    <img src="<%= qrcode %>" alt="" id="qrcode_box" />
+    <h3 id="scanned"></h3>
+  </body>
+</html>
